@@ -59,7 +59,7 @@ base-internal:
 	@echo Creating root FS
 	@mkfs -t ext4 $$LO_P2
 	@echo Flashing u-boot
-	@dd if=overlay/boot/u-boot-sunxi-with-spl.bin of=$$LO_IMG bs=1k seek=8 conv=fsync
+	@dd if=build/u-boot-sunxi-with-spl.bin of=$$LO_IMG bs=1k seek=8 conv=fsync
 	@echo Mounting boot partition
 	@mkdir -p build/tmp/kernel
 	@mount $$LO_P1 build/tmp/kernel
@@ -71,7 +71,7 @@ base-internal:
 	@mkdir -p build/tmp/rootfs
 	@mount $$LO_P2 build/tmp/rootfs
 	@echo Copying root-fs files to root partition
-	@tar -xf build/rootfs-$(patsubst %.img,%,$@).tar -C ${OUTPUT_DIR}/tmp/rootfs/
+	@tar -xf build/rootfs-$(patsubst %.img,%,$@).tar -C build/tmp/rootfs/
 	@echo Unmounting root partition
 	@umount $$LO_P2
 	@losetup -d $$LO_P1
