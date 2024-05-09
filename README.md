@@ -1,3 +1,7 @@
+# Table of Contents
+
+[TOC]
+
 # LonganPi-3H-SDK
 Scripts and blobs for LonganPi 3H image build.
 > Tested on Ubuntu 22.04.2 LTS and WSL2 Ubuntu-22.04
@@ -40,24 +44,44 @@ sudo ./mkrootfs-debian-gui.sh
 
 ## Docker build
 
-If you have `make` and `docker` installed you can also build the image with docker. The `Makefile` has four targets that you can use:
+**Note:** The container to execute the actual image build is run with the `--privileged` flag (due to `quemu` usage). If you cannot run privileged containers in your environment then the docker build will most likely not work for you.
+
+If you have `make` and `docker` installed you can also build the image with docker. The `Makefile` has two utility targets and two main group of targets that you can run. An `out/` folder will be created which is mounted into the container and the output files will be copied in there.
+
+### Utility Targets
 
 ```shell
 # Just build the build-container
 make build
 
+# remove the out/ directory
+make clean
+```
+
+### Targets to build the root FS and boot files
+
+```shell
+# Build Debian desktop root FS
+make debian-gui
+
+# Build Debian root FS without gui
+make debian-cli
+
+# Build Ubuntu root FS without gui
+make ubuntu-cli
+```
+
+### Targets to build the full image
+
+```shell
 # Build Debian desktop image
-make debiangui
+make debian-gui-img
 
 # Build Debian image without gui
-make debiancli
+make debian-cli-img
 
 # Build Ubuntu image without gui
-make ubuntucli
+make ubuntu-cli-img
 ```
-An `out/` folder will be created which is mounted into the container and the image `.tar` files will be copied in there.
 
 From there you can follow https://wiki.sipeed.com/hardware/en/longan/h618/lpi3h/7_develop_mainline.html to create a boot card.
-
-**Note:** The container to execute the actual image build is run with the `--privileged` flag (due to `quemu` usage). If you cannot run privileged containers in your environment then the docker build will most likely not work for you.
-
